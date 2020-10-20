@@ -1,0 +1,40 @@
+version: "3"
+services:
+  frontend:
+    image: client-movie-img
+    container_name: client-movie-con
+    stdin_open: true
+    ports: 
+      - "3000:3000"
+    networks:
+      - mern-app
+    build:
+       context: ./client
+       dockerfile: Dockerfile
+  backend:
+    image: server-movie-img
+    container_name: server-movie-con
+    ports:
+      - "5000:5000"
+    networks:
+      - mern-app
+    build:
+       context: ./server
+       dockerfile: Dockerfile
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:4.4
+    container_name: mongodbmovie
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+      - mongodbmovie:/data/db
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  mongodbmovie:
+    driver: local
